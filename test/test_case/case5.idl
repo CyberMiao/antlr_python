@@ -1,0 +1,5 @@
+struct A{
+    short a = 10;
+    short b = 5;
+    short c = 2;
+};

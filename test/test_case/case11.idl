@@ -1,0 +1,11 @@
+struct A{
+    long a1 = 1l, a2 = 23132155L;
+    float b1 = 0.5e-3f, b2 = 0.5e+3f, b3 = 0.5E-3f, b4 = 0.5E+3f,
+          b5 = 0.5e-3F, b6 = 0.5d, b7 = 0.5D, b8 = .5, b9 = 5e+3, b10 = 5e-3f,
+          b11 = 5d;
+    char c1 = ' ', c2 = '\b', c3 = '\t', c4 = '\n', c5 = '\f', c6 = '\r', c7 = '\"', c8 = '\'', c9 = '\\',
+         c10 = 'a', c11 = '1';
+
+    string d1 = " ", d2 = "\b \t \n \f \r \" \' \\";
+    boolean e1 = true, e2 = TRUE, e3 = false, e4 = FALSE;
+};

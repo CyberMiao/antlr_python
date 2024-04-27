@@ -1,0 +1,6 @@
+Struct_type: struct<A>
+  Member_list: member_list
+    Terminal: short 
+      Simple_declarator: a=
+        Literal: 1
+          Add_expr: +5

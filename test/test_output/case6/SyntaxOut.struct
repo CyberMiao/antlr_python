@@ -1,0 +1,14 @@
+Struct_type: struct<A>
+  Member_list: member_list
+    Scoped_name: ::scoped
+      Terminal: ::id
+        Terminal: ::id
+          Terminal: ::id
+      Simple_declarator: a=
+        Literal: 'a'
+    Terminal: char 
+      Simple_declarator: b=
+        Literal: 'b'
+    Struct_type: struct<A>
+      Member_list: member_list
+      Simple_declarator: c=

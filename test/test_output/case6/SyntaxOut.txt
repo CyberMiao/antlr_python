@@ -1,0 +1,14 @@
+struct<A>
+  member_list
+    ::scoped
+      ::id
+        ::id
+          ::id
+      a=
+        'a'
+    char 
+      b=
+        'b'
+    struct<A>
+      member_list
+      c=

@@ -1,0 +1,11 @@
+Struct_type: struct<A>
+  Member_list: member_list
+    Terminal: short 
+      Simple_declarator: a=
+        Literal: 10
+    Terminal: short 
+      Simple_declarator: b=
+        Literal: 5
+    Terminal: short 
+      Simple_declarator: c=
+        Literal: 2

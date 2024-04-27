@@ -1,0 +1,5 @@
+struct A{
+    scoped::id::id::id a = 'a';
+    char b = 'b';
+    struct A{} c;
+};

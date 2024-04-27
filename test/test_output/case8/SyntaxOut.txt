@@ -1,0 +1,6 @@
+struct<A>
+  member_list
+    short 
+      a=
+        1
+          +5

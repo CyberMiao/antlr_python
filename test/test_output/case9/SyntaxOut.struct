@@ -1,0 +1,12 @@
+Struct_type: struct<A>
+  Member_list: member_list
+    Terminal: short 
+      Simple_declarator: a=
+        Literal: 2
+          Add_expr: -5
+          Simple_declarator: c=
+            Literal: 5
+              Add_expr: -6
+        Simple_declarator: b=
+          Literal: 2
+            Add_expr: +3

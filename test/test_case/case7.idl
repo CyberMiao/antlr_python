@@ -1,0 +1,22 @@
+struct A{
+    float a;
+    double b;
+    long double c;
+    short d;
+    int16 e;
+    long f;
+    int32 g;
+    long long h;
+    int64 i;
+    int8 j;
+    unsigned short k;
+    uint16 l;
+    unsigned long m;
+    uint32 n;
+    unsigned long long o;
+    uint64 p;
+    uint8 q;
+    char r;
+    string s;
+    boolean t;
+};
