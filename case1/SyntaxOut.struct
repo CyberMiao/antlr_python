@@ -1,4 +1,0 @@
-Module: module<A>
-  Type_decl: type<b>
-  Module: module<B>
-    Type_decl: type<c>

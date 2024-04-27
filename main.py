@@ -2,6 +2,8 @@ import os.path
 import shutil
 import sys
 from antlr4 import *
+
+from src.SyntaxException import SyntaxException
 from src.gen.MIDLLexer import MIDLLexer
 from src.gen.MIDLParser import MIDLParser
 from src.MIDLVisitorAST import MIDLVisitorAST
@@ -25,7 +27,11 @@ def main(input_file_path, output_dir_path):
         os.mkdir(output_dir_path)
         # 定义抽象语法树
         visitor_ast = MIDLVisitorAST()
-        visitor_ast.visit(tree)
+        try:
+            visitor_ast.visit(tree)
+        except SyntaxException as exception:
+            print('文件{}第{}行错误，{}'.format(input_file_path, exception.line, exception.info))
+            exit(0)
         ast = visitor_ast.AST
         # 保存到输出文件夹
         ast.save_tree_to_file(output_dir_path)

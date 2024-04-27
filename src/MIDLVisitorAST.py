@@ -1,4 +1,5 @@
 # 访问者模式生成抽象语法树
+from src.SyntaxException import SyntaxException
 from src.gen.MIDLVisitor import MIDLVisitor
 from src.gen.MIDLParser import MIDLParser
 from src.TreeNode import TreeNode
@@ -9,6 +10,9 @@ class MIDLVisitorAST(MIDLVisitor):
 
     def __init__(self):
         self.AST = None
+        self.module_id_list = []
+        self.struct_id_list = []
+        self.base_id_list = []
         pass
 
     def visitSpecification(self, ctx: MIDLParser.SpecificationContext):
@@ -25,27 +29,51 @@ class MIDLVisitorAST(MIDLVisitor):
         return self.visit(ctx.children[0])
 
     def visitModule(self, ctx: MIDLParser.ModuleContext):
-        module = TreeNode('module<'+ctx.children[1].getText()+'>', 'Module')
+        module_id = ctx.children[1].getText()
+        module = TreeNode('module<'+module_id+'>', 'Module')
         definition_root = self.visit(ctx.children[3])
+        if module_id in self.module_id_list:
+            raise SyntaxException(ctx.start.line, 'module {} 已经存在，请勿重复赋值!'.format(module_id))
+        else:
+            # 将id加入符号表中
+            self.module_id_list.append(ctx.children[1].getText())
+
         node = definition_root
         for i in range(4, len(ctx.children)):
             if type(ctx.children[i]) is not TerminalNodeImpl:
                 node.add_child(self.visit(ctx.children[i]))
                 node = node.get_child(0)
         module.add_child(definition_root)
+        # 清空当前module下struct表及base表,当前module作用域结束
+        self.struct_id_list.clear()
+        self.base_id_list.clear()
         return module
 
     def visitType_decl(self, ctx: MIDLParser.Type_declContext):
         if len(ctx.children) == 2:
-            type_decl = TreeNode('type<'+ctx.children[1].getText()+'>', 'Type_decl')
+            struct_id = ctx.children[1].getText()
+            if struct_id in self.struct_id_list:
+                raise SyntaxException(ctx.start.line, 'struct {} 已经存在，请勿重复赋值!'.format(struct_id))
+            else:
+                self.struct_id_list.append(struct_id)
+            type_decl = TreeNode('type<' + struct_id + '>', 'Type_decl')
         else:
             type_decl = self.visit(ctx.children[0])
+        # 清空当前base_id表
+        self.base_id_list.clear()
         return type_decl
 
     def visitStruct_type(self, ctx: MIDLParser.Struct_typeContext):
-        struct_type = TreeNode('struct<'+ctx.children[1].getText()+'>', 'Struct_type')
+        struct_id = ctx.children[1].getText()
+        if struct_id in self.struct_id_list:
+            raise SyntaxException(ctx.start.line, 'struct {} 已经存在，请勿重复赋值!'.format(struct_id))
+        else:
+            self.struct_id_list.append(struct_id)
+        struct_type = TreeNode('struct<' + struct_id + '>', 'Struct_type')
         member_list = self.visit(ctx.children[3])
         struct_type.add_child(member_list)
+        # 清空当前base_id表
+        self.base_id_list.clear()
         return struct_type
 
     def visitMember_list(self, ctx: MIDLParser.Member_listContext):
@@ -107,14 +135,24 @@ class MIDLVisitorAST(MIDLVisitor):
         return self.visit(ctx.children[0])
 
     def visitSimple_declarator(self, ctx: MIDLParser.Simple_declaratorContext):
-        sim_decl = TreeNode(ctx.children[0].getText()+'=', 'Simple_declarator')
+        base_id = ctx.children[0].getText()
+        if base_id in self.base_id_list:
+            raise SyntaxException(ctx.start.line, '变量{}已存在，请勿重复赋值!'.format(base_id))
+        else:
+            self.base_id_list.append(base_id)
+        sim_decl = TreeNode(base_id + '=', 'Simple_declarator')
         if len(ctx.children) == 3:
             or_expr = self.visit(ctx.children[2])
             sim_decl.add_child(or_expr)
         return sim_decl
 
     def visitArray_declarator(self, ctx: MIDLParser.Array_declaratorContext):
-        arr_decl = TreeNode(ctx.children[0].getText() + "[]", 'Array_declarator')
+        array_base_id = ctx.children[0].getText()
+        if array_base_id in self.base_id_list:
+            raise SyntaxException(ctx.start.line, '变量{}已存在，请勿重复赋值!'.format(array_base_id))
+        else:
+            self.base_id_list.append(array_base_id)
+        arr_decl = TreeNode(array_base_id + "[]", 'Array_declarator')
         or_expr = self.visit(ctx.children[2])
         arr_decl.add_child(or_expr)
         if len(ctx.children) == 6:

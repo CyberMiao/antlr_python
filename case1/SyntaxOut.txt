@@ -1,4 +1,0 @@
-module<A>
-  type<b>
-  module<B>
-    type<c>
